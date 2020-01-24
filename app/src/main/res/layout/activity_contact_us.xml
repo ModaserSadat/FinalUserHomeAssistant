@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ContactUsActivity">
+
+    <!--to include AppBar layout-->
+    <include
+        android:id="@+id/contact_us_appbar_toolbar"
+        layout="@layout/app_bar_layout"/>
+
+    <TextView
+        android:id="@+id/contact_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="70dp"
+        android:text="If You have any Query, Contact us Via Email:"
+        android:textColor="@android:color/black"
+        android:textStyle="bold|italic"
+        android:textSize="17sp"/>
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/contact_text_view"
+        android:src="@drawable/contact_email"/>
+
+    <TextView
+        android:id="@+id/contact_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/contact_text_view"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="25dp"
+        android:text="modasersadat2017@gmail.com"
+        android:textColor="#F201229B" />
+    <TextView
+        android:id="@+id/or_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/contact_email"
+        android:text="OR"
+        android:layout_centerHorizontal="true"
+        android:textColor="@android:color/black"
+        android:textStyle="bold|italic"
+        android:textSize="17sp"
+        android:layout_marginTop="30dp"
+        />
+    <TextView
+        android:id="@+id/contact_phone_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/or_text_view"
+        android:text="Get in touch with us through Phone:"
+        android:textColor="@android:color/black"
+        android:textStyle="bold|italic"
+        android:textSize="17sp"/>
+    <TextView
+        android:id="@+id/contact_phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/contact_phone_text_view"
+        android:layout_marginLeft="52dp"
+        android:layout_marginTop="25dp"
+        android:text="+917499782164"
+        android:textColor="#F201229B" />
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/call_image_btn"
+        android:layout_width="45dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/contact_phone_text_view"
+        android:src="@drawable/contact_phone"/>
+
+
+
+
+
+</RelativeLayout>

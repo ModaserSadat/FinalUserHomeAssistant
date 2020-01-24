@@ -8,15 +8,28 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -41,6 +54,13 @@ public class MainActivity extends AppCompatActivity {
    private ActionBarDrawerToggle mActionBarDrawerToggle;
    private Toolbar mToolbar;
    private TextView NavProfileName;
+   ImageView teacher;
+   ImageView carpenter;
+   ImageView mechanic;
+   ImageView plumber;
+   ImageView electrician;
+   ImageView engineer;
+
 
 
 
@@ -60,7 +80,13 @@ public class MainActivity extends AppCompatActivity {
         user=mAuth.getCurrentUser();
         mFirebaseDatabase=FirebaseDatabase.getInstance();
         mDatabaseReference=mFirebaseDatabase.getReference("Users");
-        mCircleImageView=findViewById(R.id.nav_profile_image);
+
+        teacher=findViewById(R.id.teacher);
+        carpenter = findViewById(R.id.carpenter);
+        mechanic = findViewById(R.id.mechanic);
+        plumber = findViewById(R.id.plumber);
+        electrician = findViewById(R.id.electrician);
+        engineer = findViewById(R.id.engineer);
 
 
         mDrawerLayout=findViewById(R.id.drawable_layout);
@@ -73,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
         mNavigationView=findViewById(R.id.navigation_view);
         View navView=mNavigationView.inflateHeaderView(R.layout.navigation_header);
         NavProfileName=navView.findViewById(R.id.nav_user_fullname);
+        mCircleImageView=navView.findViewById(R.id.nav_profile_image);
 
         //getSupportActionBar().setDisplayShowHomeEnabled(true);
         //to include Navigation header in navagation drawer
@@ -89,7 +116,48 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
+teacher.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View view) {
+        Intent i=new Intent(MainActivity.this,ItemsActivity.class);
+        startActivity(i);
+    }
+});
+carpenter.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View view) {
+        Intent i = new Intent(MainActivity.this,CarpenterViewItemActivity.class);
+        startActivity(i);
+    }
+});
+        mechanic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainActivity.this,MechanicViewItemActivity.class);
+                startActivity(i);
+            }
+        });
+        plumber.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainActivity.this,PlumberViewItemActivity.class);
+                startActivity(i);
+            }
+        });
+        electrician.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainActivity.this,ElectricianViewItemActivity.class);
+                startActivity(i);
+            }
+        });
+        engineer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainActivity.this,EngineerViewItemActivity.class);
+                startActivity(i);
+            }
+        });
 
 
 
@@ -106,10 +174,15 @@ public class MainActivity extends AppCompatActivity {
                     for (DataSnapshot ds : dataSnapshot.getChildren()) {
                         //get Data
                         String name = "" + ds.child("Name").getValue();
-                        String email = "" + ds.child("Email").getValue();
+                        //String email = "" + ds.child("Email").getValue();
+                        String image=""+ds.child("image").getValue();
+
                         
                         //set Data
                         NavProfileName.setText(name);
+                        if (image!=null) {
+                            Picasso.get().load(image).placeholder(R.drawable.profile).into(mCircleImageView);
+                        }
 
 
 
@@ -134,19 +207,22 @@ public class MainActivity extends AppCompatActivity {
         switch (menuItem.getItemId())
         {
             case R.id.nav_home:
-                Toast.makeText(this, "Home Clicked", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getApplicationContext(),MainActivity.class));
                 break;
             case R.id.nav_about_us:
-                Toast.makeText(this, "About Us Clicked", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getApplicationContext(),AboutUsActivity.class));
                 break;
             case R.id.nav_settings:
-                Toast.makeText(this, "Settings Clicked", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getApplicationContext(),SettingsActivity.class));
                 break;
             case R.id.nav_rate:
-                Toast.makeText(this, "Rate App clicked", Toast.LENGTH_SHORT).show();
+                rateApp();
                 break;
             case R.id.nav_contact:
-                Toast.makeText(this, "Contact Us Clicked", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getApplicationContext(),ContactUsActivity.class));
+                break;
+            case R.id.nav_share:
+                shareApp();
                 break;
             case R.id.nav_logout:
                mAuth.signOut();
@@ -158,6 +234,32 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void shareApp() {
+        Intent shareIntent =   new Intent(android.content.Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT,"Insert Subject here");
+        String app_url = " https://play.google.com/store/apps/details?id=com.example.homeassistant";
+        shareIntent.putExtra(android.content.Intent.EXTRA_TEXT,app_url);
+        startActivity(Intent.createChooser(shareIntent, "Share via"));
+    }
+
+    //This meyhod will launch the Play Store with your App page already opened. The user can rate it there.
+    private void rateApp() {
+
+        Uri uri = Uri.parse("market://details?id=" + getApplicationContext().getPackageName());
+        Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+        // To count with Play market backstack, After pressing back button,
+        // to taken back to our application, we need to add following flags to intent.
+        goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                Intent.FLAG_ACTIVITY_NEW_DOCUMENT |
+                Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        try {
+            startActivity(goToMarket);
+        } catch (ActivityNotFoundException e) {
+            startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://play.google.com/store/apps/details?id=" + getApplicationContext().getPackageName())));
+        }
+    }
 
 
     @Override
@@ -184,8 +286,10 @@ public class MainActivity extends AppCompatActivity {
         if(id==R.id.action_logout){
             mAuth.signOut();
             goToLoginActivity();
-
-
+        }
+        if(id==R.id.changePassword)
+        {
+            showRecoverPasswordDialog();
         }
         //to make hamburger worked
         if(mActionBarDrawerToggle.onOptionsItemSelected(item))
@@ -196,8 +300,84 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void showRecoverPasswordDialog() {
+        //AlertDialog
+        AlertDialog.Builder builder=new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle("         Change Password");
+        //set layout linear layout
+        LinearLayout linearLayout=new LinearLayout(MainActivity.this);
+        final EditText eTextEmail=new EditText(MainActivity.this);
+        eTextEmail.setHint("Email");
+        eTextEmail.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+        /*sets the min width of a EditView to fit a text of n 'M' letters regardless of the actual text extension and text size*/
+        eTextEmail.setMinEms(16);
+        linearLayout.addView(eTextEmail);
+        linearLayout.setPadding(10,10,10,10);
+        builder.setView(linearLayout);
+        //button Recover
+        builder.setPositiveButton("Send me Password Reset Link", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                String RecoverEmail=eTextEmail.getText().toString().trim();
+                beginRecovery(RecoverEmail);
+
+
+
+
+            }
+        });
+        //button Cancel
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+
+
+            }
+        });
+        //show dialog
+        builder.create().show();
+
+    }
+
+    private void beginRecovery(String recoverEmail) {
+        final ProgressDialog progressdialog;
+        //show ProgressDialog
+        progressdialog=new ProgressDialog(this);
+        progressdialog.setTitle("");
+        progressdialog.setMessage("Sending Email...");
+        progressdialog.setCanceledOnTouchOutside(false);
+        progressdialog.show();
+        mAuth.sendPasswordResetEmail(recoverEmail)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful())
+                        {
+                            progressdialog.dismiss();
+                            Toast.makeText(MainActivity.this, "Password reset link has been sent to your e-mail address!", Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                        {
+                            progressdialog.dismiss();
+                            Toast.makeText(MainActivity.this, "Failed...", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressdialog.dismiss();
+                        //get and Show proper error message
+                        Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+    }
+
     private void goToLoginActivity() {
         startActivity(new Intent(MainActivity.this,LoginActivity.class));
         finish();
     }
+
 }

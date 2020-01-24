@@ -40,6 +40,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextView mNoAccountLink,mForgotPasswordLink;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +58,7 @@ public class LoginActivity extends AppCompatActivity {
         mButtonLogin = findViewById(R.id.button_login);
         mNoAccountLink=findViewById(R.id.no_account_link);
         mForgotPasswordLink=findViewById(R.id.forgot_password_link);
+
 
         loadingBar=new ProgressDialog(this);
         loadingBar.setTitle("Login Account");
@@ -129,7 +131,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void beginRecovery(String recoverEmail) {
-         final ProgressDialog progressdialog;
+        final ProgressDialog progressdialog;
         //show ProgressDialog
         progressdialog=new ProgressDialog(this);
         progressdialog.setTitle("");

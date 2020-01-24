@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.SignInMethodQueryResult;
 import com.google.firebase.database.DataSnapshot;
@@ -62,7 +63,7 @@ public class SignUpActivity extends AppCompatActivity  {
         mButtonSignup = findViewById(R.id.button_signup);
         mTextViewHaveAccount=findViewById(R.id.have_account);
 
-        db = FirebaseFirestore.getInstance();
+
         //Get hold of an instance of FirebaseAuth
         mAuth = FirebaseAuth.getInstance();
 
@@ -129,7 +130,7 @@ public class SignUpActivity extends AppCompatActivity  {
 
         final DatabaseReference RootRef;
         RootRef= FirebaseDatabase.getInstance().getReference("Users");
-        final String id=RootRef.push().getKey();
+        //final String id=RootRef.push().getKey();
         RootRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -145,36 +146,66 @@ public class SignUpActivity extends AppCompatActivity  {
 
                                 if (isNewUser) {
 
-                                    HashMap<String,Object> userData=new HashMap<>();
-                                    userData.put("Email",email);
-                                   // userData.put("Password",password);
-                                    userData.put("Name",userName);
 
-                                    RootRef.child(id).setValue(userData)
-                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    mAuth.createUserWithEmailAndPassword(email, password)
+                                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                                 @Override
-                                                public void onComplete(@NonNull Task<Void> task) {
-
+                                                public void onComplete(@NonNull Task<AuthResult> task) {
                                                     if(task.isSuccessful())
                                                     {
-                                                        mAuth.createUserWithEmailAndPassword(email, password);
-                                                        Toast.makeText(SignUpActivity.this, "Congratulations, your account has been created", Toast.LENGTH_SHORT).show();
-                                                        loadingBar.dismiss();
-                                                        startActivity(new Intent(getApplicationContext(),LoginActivity.class));
-                                                        finish();
-                                                    }
-                                                    else
-                                                    {
-                                                        loadingBar.dismiss();
-                                                        Toast.makeText(SignUpActivity.this, "Network Error: Please try again after some time...", Toast.LENGTH_SHORT).show();
-                                                    }
+                                                        String id=mAuth.getCurrentUser().getUid();
+                                                        HashMap<String,Object> userData=new HashMap<>();
+                                                        userData.put("Email",email);
+                                                        // userData.put("Password",password);
+                                                        userData.put("Name",userName);
+                                                        userData.put("Address","none");
+                                                        RootRef.child(id).setValue(userData).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
 
+                                                                if(task.isSuccessful())
+                                                                {
+                                                                    //  mAuth.createUserWithEmailAndPassword(email, password);
+                                                                    Toast.makeText(SignUpActivity.this, "Congratulations, your account has been created", Toast.LENGTH_SHORT).show();
+                                                                    loadingBar.dismiss();
+                                                                    startActivity(new Intent(getApplicationContext(),LoginActivity.class));
+                                                                    finish();
+                                                                }
+                                                                else
+                                                                {
+                                                                    loadingBar.dismiss();
+                                                                    Toast.makeText(SignUpActivity.this, "Network Error: Please try again after some time...", Toast.LENGTH_SHORT).show();
+                                                                }
+
+                                                            }
+                                                        });
+
+
+
+
+                                                    }
                                                 }
                                             });
 
 
 
+
+
+
+
+
+
                                 }
+
+
+
+
+
+
+
+
+
+
                                 else
                                 {
 

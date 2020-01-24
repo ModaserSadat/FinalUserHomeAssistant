@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/cardcolor"
+    tools:context=".DetailsActivity">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_margin="3dp"
+        app:cardCornerRadius="3dp"
+        app:cardElevation="5dp"
+
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:background="@color/cardcolor"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/teacherDetailImageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="338dp"
+                    android:layout_alignParentTop="true"
+                    android:padding="5dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_action_account_circle_40" />
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/nameDetailTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:padding="5dp"
+                        android:minLines="2"
+                        android:layout_marginStart="16dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorAccent"
+                        android:text="Teacher Name"
+                        android:layout_marginLeft="16dp" />
+                    <TextView
+                        android:id="@+id/dateDetailTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:layout_marginStart="16dp"
+                        android:minLines="2"
+                        android:textSize="25sp"
+                        android:textStyle="bold"
+                        android:text="DATE"
+                        android:layout_marginLeft="16dp" />
+
+                    <TextView
+                        android:id="@+id/categoryDetailTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_marginStart="16dp"
+                        android:minLines="2"
+                        android:textStyle="bold"
+                        android:textSize="25sp"
+                        android:text="Category : Teacher"
+                        android:layout_marginLeft="16dp" />
+
+                    <TextView
+                        android:id="@+id/descriptionDetailTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:layout_marginStart="16dp"
+                        android:minLines="2"
+                        android:textSize="25sp"
+                        android:textStyle="bold"
+                        android:text="Teacher Description Here........."
+                        android:layout_marginLeft="16dp" />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Teacher phone number"
+                            android:layout_marginStart="16dp"
+                            android:textStyle="bold"
+                            android:textSize="25sp"
+
+                            android:id="@+id/phonedetailTextView"
+                            android:layout_marginLeft="16dp" />
+
+
+
+                        <ImageButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/phonecall"
+                            android:layout_marginLeft="20dp"
+                            android:src="@drawable/ic_call_black_24dp"
+                            android:background="@drawable/button_bg"/>
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>
